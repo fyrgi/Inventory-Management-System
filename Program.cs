@@ -17,19 +17,18 @@ Console.WriteLine("Little Stationery Shop's Inventory Management System Beta");
 // Error handlig
 
 string dataFolder = Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, @"..\..\..\Data"));
-Console.WriteLine(dataFolder);
-Console.ReadLine();
-FileHandler fileHandler = new(dataFolder, "products.json");
-ProductManager productManager = new ProductManager();
-List<Product> products = productManager._products;
+FileHandler fileHandler = new(dataFolder, "Products.json");
+fileHandler.EnsureFileExists();
+List<Product> productsFromFile = fileHandler.ReadJson<Product>();
+ProductManager productManager = new ProductManager(productsFromFile, fileHandler);
 
 
 //var productManager = new ProductManager();
 
 List<MenuOption> mainMenuOptions =
 [
-    new("Add Product", productManager.AddProduct),
-    new("View Products", () => UI.ShowProduct(productManager)),
+    new("Add Product", () => UI.AddProduct(productManager)),
+    new("View Products", () => UI.ShowProducts(productManager)),
     new("Search Products", productManager.Search),
     new("Edit Product", productManager.EditProduct),
     new("Remove Product", productManager.Remove),

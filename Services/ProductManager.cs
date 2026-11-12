@@ -8,21 +8,36 @@ namespace inventory.Services
     public class ProductManager
     {
         public List<Product> _products = new List<Product>();
-        public ProductManager()
+        private readonly FileHandler _fileHandler;
+        public int NextId => _products.Count == 0
+            ? 1
+            : _products.Max(product => product.Id) + 1;
+
+        public ProductManager(List<Product> products, FileHandler fileHandler)
         {
-            // Initialize the product list with some sample products
-            _products.Add(new Product(1, "Pen", 1.5, 5, 100, 1));
-            _products.Add(new Product(2, "Notebook", 3.0, 1, 50, 1));
-            _products.Add(new Product(3, "Printer Paper", 5.0, 2, 200, 3));
+            _products = products;
+            _fileHandler = fileHandler;
         }
         public List<Product> GetProductsByCategory(Category category)
         {
-            throw new NotImplementedException();
+            return _products.FindAll(p => p.CategoryId == category);
+            
         }
 
-        public void AddProduct()
+        public List<Product> GetProducts()
         {
-            throw new NotImplementedException();
+            return _products;
+        }
+
+        public void AddProduct(Product product)
+        {
+            _products.Add(product);
+        }
+
+        public void SaveToFile()
+        {
+
+            _fileHandler.WriteJson(_products);
         }
 
         public void View()
@@ -40,9 +55,28 @@ namespace inventory.Services
             throw new NotImplementedException();
         }
 
+
+        // Takes the ID of a product and removes it from the file Products.json (and from the _products list in memory).
         public void Remove()
         {
-            throw new NotImplementedException();
+            Console.Write("Enter the ID of the product to remove: ");
+            if (!int.TryParse(Console.ReadLine(), out int id))
+            {
+                Console.WriteLine("Invalid ID. Please enter a valid integer.");
+                return;
+            }
+            var product = _products.Find(p => p.Id == id);
+            if (product != null)
+            {
+                _products.Remove(product);
+                _fileHandler.WriteJson(_products);
+            }
+            else
+            {
+                Console.WriteLine($"Product with ID {id} not found.");
+            }
+
+
         }
 
         public void Reports()

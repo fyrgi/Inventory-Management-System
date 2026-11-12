@@ -50,19 +50,133 @@ namespace inventory.Presentation
             Console.WriteLine();
         }
 
-        // This display is not currently in use.
-        public static void ShowProduct(ProductManager productManager)
+        //This method handles the user input when adding a new product.
+        public static Product? GetProductInput(int nextId)
         {
+            string? name = ReadRequiredText("Product name");
+            if (name == null)
+                return null;
+
+            int? categoryId = ReadCategoryId();
+            if (categoryId == null)
+                return null;
+
+            decimal? price = ReadDecimal("Price per unit");
+            if (price == null)
+                return null;
+
+            decimal? quantity = ReadDecimal("Quantity");
+            if (quantity == null)
+                return null;
+
+            int? unitId = ReadUnitId();
+            if (unitId == null)
+                return null;
+
+            return new Product(nextId, name, price.Value, categoryId.Value, quantity.Value, unitId.Value);
+        }
+
+        private static string? ReadRequiredText(string prompt)
+        {
+            while (true)
+            {
+                Console.Write($"{prompt} (q to cancel): ");
+                string? input = Console.ReadLine();
+
+                if (UserCancel(input))
+                    return null;
+
+                if (string.IsNullOrWhiteSpace(input))
+                {
+                    UI.ShowMessage($"{prompt} cannot be empty.", "error");
+                    continue;
+                }
+
+                return input.Trim();
+            }
+        }
+        private static decimal? ReadDecimal(string prompt)
+        {
+            while (true)
+            {
+                Console.Write($"{prompt} (q to cancel): ");
+                string? input = Console.ReadLine();
+
+                if (UserCancel(input))
+                    return null;
+
+                if (!decimal.TryParse(input, out decimal inputValue) || inputValue < 0)
+                {
+                    UI.ShowMessage($"Invalid {prompt}. Please try again.", "error");
+                    continue;
+                }
+
+                return inputValue;
+            }
+        }
+        private static int? ReadCategoryId()
+        {
+            while (true)
+            {
+                Console.WriteLine("Select a category:");
+                foreach (Category category in Enum.GetValues(typeof(Category)))
+                {
+                    Console.WriteLine($"{(int)category}. {category}");
+                }
+                Console.Write("Enter the category number (q to cancel): ");
+                string? input = Console.ReadLine();
+                if (UserCancel(input))
+                    return null;
+                if (!int.TryParse(input, out int categoryId) || !Enum.IsDefined(typeof(Category), categoryId))
+                {
+                    UI.ShowMessage("Invalid category. Please try again.", "error");
+                    continue;
+                }
+                return categoryId;
+            }
+        }
+        private static int? ReadUnitId()
+        {
+            while (true)
+            {
+                Console.WriteLine("Select a unit:");
+                foreach (Unit unit in Enum.GetValues(typeof(Unit)))
+                {
+                    Console.WriteLine($"{(int)unit}. {unit}");
+                }
+                Console.Write("Enter the unit number (q to cancel): ");
+                string? input = Console.ReadLine();
+                if (UserCancel(input))
+                    return null;
+
+                if (!int.TryParse(input, out int unitId) || !Enum.IsDefined(typeof(Unit), unitId))
+                {
+                    UI.ShowMessage("Invalid unit. Please try again.", "error");
+                    continue;
+                }
+                return unitId;
+            }
+        }
+
+        // Repetitive check for exit - separated in own method.
+        private static bool UserCancel(string input)
+        {
+            return input == null || input.Trim().Equals("q", StringComparison.OrdinalIgnoreCase);
+        }
+        // This display is not currently in use.
+        public static void ShowProductByCategory(ProductManager productManager)
+        {
+            List<Product> products = productManager.GetProducts();
             DateTime today = DateTime.Today;
 
             ShowMessage(
-                "ASSET TRACKING - DEVICES BY OFFICE",
+                "All products by Category",
                 "info");
 
-            foreach (Category category in Enum.GetValues(typeof(Category)))
+            /*foreach (Category category in Enum.GetValues(typeof(Category)))
             {
                 Console.WriteLine($"{(int)category}. {category}");
-            }
+            }*/
             foreach (Category category in Enum.GetValues(typeof(Category)))
             {
                 ShowMessage(
@@ -70,14 +184,14 @@ namespace inventory.Presentation
                     "statistics");
 
                 //List<Product> products = productManager.GetProductsByCategory(category);
-                List<Product> products = productManager._products.FindAll(p => p.CategoryId == category);
-                if (products.Count == 0)
+                List<Product> displayProducts = products.FindAll(p => p.CategoryId == category);
+                if (displayProducts.Count == 0)
                 {
                     ShowMessage("No products found.", "info");
                     continue;
                 }
 
-                foreach (Product product in products)
+                foreach (Product product in displayProducts)
                 {
 
 
@@ -85,11 +199,11 @@ namespace inventory.Presentation
                         $"ID: {product.Id} | " +
                         $"{product.Name}\n" +
                         $"Category: {Models.Category.GetName(product.CategoryId)}\n" +
-                        $"Quantity: {product.Quantity} {Models.Unit.GetName(product.UnitId)}" +
-                        $"Price per unit: {product.PricePerUnit:N2} " +
+                        $"Quantity: {product.Quantity} {Models.Unit.GetName(product.UnitId)}\n" +
+                        $"Price per unit: {product.PricePerUnit:N2}\n" +
                         $"Total Price: {product.TotalPrice:N2}\n" +
                         $"Added on date: {product.AddedOn:yyyy-MM-dd}\n" +
-                        $"Last Modified on: {product.LastModifiedOn:yyyy-MM-dd}";
+                        $"Last Modified on: {product.LastModifiedOn:yyyy-MM-dd}\n";
 
 
 
@@ -98,45 +212,70 @@ namespace inventory.Presentation
             }
         }
 
+        // Propt the user to add a new product to the inventory.
+        public static void AddProduct(ProductManager productManager)
+        {
+            Product? newProduct = GetProductInput(productManager.NextId);
+
+            if (newProduct == null)
+            {
+                ShowMessage("Adding the product was cancelled.", "info");
+                return;
+            }
+
+            productManager.AddProduct(newProduct);
+            productManager.SaveToFile();
+            ShowMessage($"Product '{newProduct.Name}' added successfully!", "success");
+        }
+
         // The display in use is a more compact table format for showing devices by office.
-        /*public static void ShowDevicesByOffice(DeviceManager deviceManager)
+        public static void ShowProducts(ProductManager productManager)
         {
             DateTime today = DateTime.Today;
 
-            foreach (Office office in deviceManager.GetOffices())
+            foreach (Category category in Enum.GetValues(typeof(Category)))
             {
                 Console.WriteLine();
                 Console.ForegroundColor = ConsoleColor.Cyan;
-                Console.WriteLine($"OFFICE: {office.Country} ({office.Currency})");
+                Console.WriteLine($"Category: {category.ToString().ToUpper()}");
                 Console.ResetColor();
 
                 // Table header
                 Console.WriteLine(new string('-', 135));
 
                 Console.WriteLine(
-                    $"{"ID",-5} {"Type",-12} {"Brand",-12} {"Model",-22} " +
-                    $"{"Purchased",-16} {"Use before",-16}" +
-                    $"{"Price USD",-17} {"Local price("+office.Currency+")",-18}" +
-                    $"{"Status", - 9}");
+                    $"{"ID",-5} {"Name",-20} {"Category",-15} {"Quantity",-10} " +
+                    $"{"Price per unit",-16} {"Total Price",-16}" +
+                    $"{"Added on date",-16} {"Last Modified on",-16}");
+
 
                 Console.WriteLine(new string('-', 135));
 
-                List<Device> devices = deviceManager.GetDevicesByOffice(office.Id);
+                List<Product> products = productManager.GetProductsByCategory(category);
 
-                if (devices.Count == 0)
+                if (products.Count == 0)
                 {
-                    Console.WriteLine("No devices registered for this office.");
+                    Console.WriteLine("No products found for this category.");
                 }
 
-                foreach (Device device in devices)
+                foreach (Product product in products)
                 {
-                    DeviceLifeStatus status = deviceManager.GetDeviceLifeStatus(device, today);
+                    Console.WriteLine(
+                        $"{product.Id,-5} " +
+                        $"{product.Name,-20} " +
+                        $"{Models.Category.GetName(product.CategoryId),-15} " +
+                        $"{product.Quantity,-10} " +
+                        $"{product.PricePerUnit,-16} " +
+                        $"{product.TotalPrice,-16} " +
+                        $"{product.AddedOn:yyyy-MM-dd,-16} " +
+                        $"{product.LastModifiedOn:yyyy-MM-dd,-16}");
+                }
+            }
+        }
+    }
+}           
 
-                    Console.ForegroundColor = status switch
-                    {
-                        DeviceLifeStatus.Red => ConsoleColor.Red,
-                        DeviceLifeStatus.Yellow => ConsoleColor.Yellow,
-                        _ => ConsoleColor.White
+              /*          _ => ConsoleColor.White
                     };
 
                     string mainPrice = $"{device.PriceMainOffice:N2}";
@@ -176,6 +315,3 @@ namespace inventory.Presentation
 
             return value;
         }*/
-    }
-}
-

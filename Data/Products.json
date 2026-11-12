@@ -1,0 +1,178 @@
+[
+  {
+    "Id": 1,
+    "Name": "Pen",
+    "PricePerUnit": 1.5,
+    "CategoryId": 5,
+    "UnitId": 1,
+    "Quantity": 100,
+    "TotalPrice": 150,
+    "AddedOn": "2026-11-11T15:06:53.329942+01:00",
+    "LastModifiedOn": "2026-11-11T15:06:53.3319789+01:00"
+  },
+  {
+    "Id": 2,
+    "Name": "Notebook",
+    "PricePerUnit": 3,
+    "CategoryId": 1,
+    "UnitId": 1,
+    "Quantity": 50,
+    "TotalPrice": 150,
+    "AddedOn": "2026-11-11T15:06:53.3320025+01:00",
+    "LastModifiedOn": "2026-11-11T15:06:53.3320028+01:00"
+  },
+  {
+    "Id": 3,
+    "Name": "Printer Paper",
+    "PricePerUnit": 5,
+    "CategoryId": 2,
+    "UnitId": 3,
+    "Quantity": 200,
+    "TotalPrice": 1000,
+    "AddedOn": "2026-11-11T15:06:53.3320031+01:00",
+    "LastModifiedOn": "2026-11-11T15:06:53.3320032+01:00"
+  },
+  {
+    "Id": 4,
+    "Name": "Pencil",
+    "PricePerUnit": 0.5,
+    "CategoryId": 5,
+    "UnitId": 1,
+    "Quantity": 150,
+    "TotalPrice": 75,
+    "AddedOn": "2026-11-11T15:06:53.3320033+01:00",
+    "LastModifiedOn": "2026-11-11T15:06:53.3320034+01:00"
+  },
+  {
+    "Id": 5,
+    "Name": "Desk Organizer",
+    "PricePerUnit": 8.99,
+    "CategoryId": 2,
+    "UnitId": 1,
+    "Quantity": 24,
+    "TotalPrice": 215.76,
+    "AddedOn": "2024-01-15T00:00:00",
+    "LastModifiedOn": "2024-03-02T00:00:00"
+  },
+  {
+    "Id": 6,
+    "Name": "Ballpoint Pen Set",
+    "PricePerUnit": 6.5,
+    "CategoryId": 5,
+    "UnitId": 2,
+    "Quantity": 18,
+    "TotalPrice": 117,
+    "AddedOn": "2024-02-08T00:00:00",
+    "LastModifiedOn": "2024-06-14T00:00:00"
+  },
+  {
+    "Id": 7,
+    "Name": "Sticky Notes",
+    "PricePerUnit": 2.25,
+    "CategoryId": 1,
+    "UnitId": 3,
+    "Quantity": 75,
+    "TotalPrice": 168.75,
+    "AddedOn": "2024-03-21T00:00:00",
+    "LastModifiedOn": "2024-04-10T00:00:00"
+  },
+  {
+    "Id": 8,
+    "Name": "Whiteboard Markers",
+    "PricePerUnit": 7.8,
+    "CategoryId": 2,
+    "UnitId": 2,
+    "Quantity": 30,
+    "TotalPrice": 234,
+    "AddedOn": "2024-04-05T00:00:00",
+    "LastModifiedOn": "2024-09-18T00:00:00"
+  },
+  {
+    "Id": 9,
+    "Name": "Graph Paper Pad",
+    "PricePerUnit": 4.75,
+    "CategoryId": 3,
+    "UnitId": 3,
+    "Quantity": 40,
+    "TotalPrice": 190,
+    "AddedOn": "2024-05-12T00:00:00",
+    "LastModifiedOn": "2024-07-01T00:00:00"
+  },
+  {
+    "Id": 10,
+    "Name": "USB Flash Drive",
+    "PricePerUnit": 12.99,
+    "CategoryId": 4,
+    "UnitId": 1,
+    "Quantity": 15,
+    "TotalPrice": 194.85,
+    "AddedOn": "2024-06-03T00:00:00",
+    "LastModifiedOn": "2025-01-20T00:00:00"
+  },
+  {
+    "Id": 11,
+    "Name": "Cable Clips",
+    "PricePerUnit": 3.49,
+    "CategoryId": 4,
+    "UnitId": 2,
+    "Quantity": 60,
+    "TotalPrice": 209.4,
+    "AddedOn": "2024-07-19T00:00:00",
+    "LastModifiedOn": "2024-08-06T00:00:00"
+  },
+  {
+    "Id": 12,
+    "Name": "Document Folders",
+    "PricePerUnit": 9.25,
+    "CategoryId": 6,
+    "UnitId": 3,
+    "Quantity": 35,
+    "TotalPrice": 323.75,
+    "AddedOn": "2024-08-11T00:00:00",
+    "LastModifiedOn": "2024-11-25T00:00:00"
+  },
+  {
+    "Id": 13,
+    "Name": "Bubble Mailers",
+    "PricePerUnit": 14.5,
+    "CategoryId": 7,
+    "UnitId": 2,
+    "Quantity": 50,
+    "TotalPrice": 725,
+    "AddedOn": "2024-09-07T00:00:00",
+    "LastModifiedOn": "2025-02-12T00:00:00"
+  },
+  {
+    "Id": 14,
+    "Name": "Packing Tape",
+    "PricePerUnit": 5.99,
+    "CategoryId": 7,
+    "UnitId": 1,
+    "Quantity": 28,
+    "TotalPrice": 167.72,
+    "AddedOn": "2024-10-16T00:00:00",
+    "LastModifiedOn": "2024-12-03T00:00:00"
+  },
+  {
+    "Id": 15,
+    "Name": "Calculator",
+    "PricePerUnit": 18.75,
+    "CategoryId": 3,
+    "UnitId": 1,
+    "Quantity": 12,
+    "TotalPrice": 225,
+    "AddedOn": "2024-11-04T00:00:00",
+    "LastModifiedOn": "2025-03-09T00:00:00"
+  },
+  {
+    "Id": 16,
+    "Name": "Reusable Water Bottle",
+    "PricePerUnit": 11.5,
+    "CategoryId": 8,
+    "UnitId": 1,
+    "Quantity": 20,
+    "TotalPrice": 230,
+    "AddedOn": "2025-01-08T00:00:00",
+    "LastModifiedOn": "2025-04-22T00:00:00"
+  }
+]

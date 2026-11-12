@@ -8,7 +8,7 @@ namespace inventory.Models
     {
         private static int _currentId;
         public Product() { }
-        public Product(int id, string name, double pricePerUnit, int category, double quantity, int unitId )
+        public Product(int id, string name, decimal pricePerUnit, int category, decimal quantity, int unitId )
         {
             Id = id;
             CategoryId = (Models.Category)category;
@@ -23,11 +23,11 @@ namespace inventory.Models
 
         public int Id { get; set; }
         public string Name { get; set; }
-        public double PricePerUnit { get; set; }
+        public decimal PricePerUnit { get; set; }
         public Models.Category CategoryId { get; set; }
         public Models.Unit UnitId { get; set; }
-        public double Quantity { get; set; }
-        public double TotalPrice { get; set; }
+        public decimal Quantity { get; set; }
+        public decimal TotalPrice { get; set; }
         public DateTime AddedOn { get; set; }
         public DateTime LastModifiedOn { get; set; }
     }

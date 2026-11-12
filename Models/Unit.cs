@@ -6,9 +6,9 @@ namespace inventory.Models
 {
     public enum Unit
     {
-        Piece = 1,
-        Box = 2,
-        Pack = 3,
-        Meter = 4
+        pieces = 1,
+        boxes = 2,
+        packs = 3,
+        meters = 4
     }
 }

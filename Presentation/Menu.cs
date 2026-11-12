@@ -28,13 +28,15 @@ namespace inventory.Presentation
                 {
                     Console.WriteLine($"{i + 1}. {_options[i].Text}");
                 }
-                Console.WriteLine($"{_options.Count + 1}. Exit");
+                Console.WriteLine($"0. Exit");
 
                 Console.Write("\nChoose an option: ");
                 string? input = Console.ReadLine();
 
-                if (input == "0")
+                if (input == "0") {
+                    UI.ShowMessage("Exiting the program...", "info");
                     return;
+                }
 
                 if (int.TryParse(input, out int choice) &&
                     choice >= 1 &&
