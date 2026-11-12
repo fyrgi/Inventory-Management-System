@@ -22,6 +22,25 @@ fileHandler.EnsureFileExists();
 List<Product> productsFromFile = fileHandler.ReadJson<Product>();
 ProductManager productManager = new ProductManager(productsFromFile, fileHandler);
 
+List<(int DuplicateId, int NewId)> idRepairs = productManager.RepairDuplicateIds();
+if (idRepairs.Count > 0)
+{
+    UI.ShowMessage(
+        $"Warning: {idRepairs.Count} duplicate product ID(s) were found.",
+        "warning");
+
+    productManager.SaveToFile();
+
+    foreach ((int duplicateId, int newId) in idRepairs)
+    {
+        UI.ShowMessage(
+            $"Product with duplicate ID {duplicateId} was assigned new ID {newId}.",
+            "info");
+    }
+
+    UI.ShowMessage("Duplicate product IDs were repaired and saved.", "success");
+}
+
 
 //var productManager = new ProductManager();
 
@@ -29,11 +48,13 @@ List<MenuOption> mainMenuOptions =
 [
     new("Add Product", () => UI.AddProduct(productManager)),
     new("View Products", () => UI.ShowProducts(productManager)),
-    new("Search Products", productManager.Search),
-    new("Edit Product", productManager.EditProduct),
-    new("Remove Product", productManager.Remove),
-    new("Reports", productManager.Reports)
+    new("Search Products", () => UI.SearchProducts(productManager)),
+    new("Edit Product", () => UI.EditProduct(productManager)),
+    new("Remove Product", () => UI.DeleteProduct(productManager)),
+    new("Reports", () => UI.ShowReports(productManager))
 ];
 
+// Under Reports I want to start a new menu where the user can 
 Menu menu = new("Main Menu", mainMenuOptions);
+
 menu.Show();

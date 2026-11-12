@@ -7,7 +7,7 @@ namespace inventory.Services
 {
     public class ProductManager
     {
-        public List<Product> _products = new List<Product>();
+        private readonly List<Product> _products;
         private readonly FileHandler _fileHandler;
         public int NextId => _products.Count == 0
             ? 1
@@ -15,73 +15,168 @@ namespace inventory.Services
 
         public ProductManager(List<Product> products, FileHandler fileHandler)
         {
-            _products = products;
+            _products = new List<Product>(products);
             _fileHandler = fileHandler;
         }
         public List<Product> GetProductsByCategory(Category category)
         {
-            return _products.FindAll(p => p.CategoryId == category);
-            
+            return _products
+                .Where(product => product.CategoryId == category)
+                .OrderBy(product => product.Id)
+                .ToList();
         }
 
-        public List<Product> GetProducts()
+        public Product? GetProductById(int id)
         {
-            return _products;
+            return _products.Find(product => product.Id == id);
+        }
+
+        public List<Product> Search(string searchTerm)
+        {
+            if (string.IsNullOrWhiteSpace(searchTerm))
+                return [];
+
+            return _products
+                .Where(product => ContainsSearchTerm(product.Id.ToString(), searchTerm) ||
+                                 ContainsSearchTerm(product.Name, searchTerm) ||
+                                 ContainsSearchTerm(product.CategoryId.ToString(), searchTerm))
+                .OrderBy(product => product.Id)
+                .ToList();
+        }
+
+        public List<Product> GetProductsByLastModifiedDate()
+        {
+            return _products
+                .OrderByDescending(product => product.LastModifiedOn)
+                .ToList();
+        }
+
+        public List<Product> GetProductsByPrice()
+        {
+            return _products
+                .OrderBy(product => product.PricePerUnit)
+                .ThenBy(product => product.Name)
+                .ToList();
+        }
+
+        public List<Product> GetProductsByQuantity()
+        {
+            return _products
+                .OrderBy(product => product.Quantity)
+                .ToList();
+        }
+
+        public List<Product> GetProductsById()
+        {
+            return _products
+                .OrderBy(product => product.Id)
+                .ToList();
+        }
+
+        private static bool ContainsSearchTerm(string value, string searchTerm)
+        {
+            return value.Contains(searchTerm, StringComparison.OrdinalIgnoreCase);
+        }
+
+        public List<(int DuplicateId, int NewId)> RepairDuplicateIds()
+        {
+            HashSet<int> usedIds = [];
+            List<(int DuplicateId, int NewId)> repairs = [];
+
+            foreach (Product product in _products)
+            {
+                if (usedIds.Add(product.Id))
+                    continue;
+
+                int duplicateId = product.Id;
+                int newId = NextId;
+                product.Id = newId;
+                usedIds.Add(newId);
+                repairs.Add((duplicateId, newId));
+            }
+
+            return repairs;
+        }
+
+        public int GetProductCount()
+        {
+            return _products.Count;
+        }
+
+        public decimal GetTotalQuantity()
+        {
+            return _products.Sum(product => product.Quantity);
+        }
+
+        public decimal GetTotalInventoryValue()
+        {
+            return _products.Sum(product => product.TotalPrice);
+        }
+
+        public decimal GetTotalQuantityByCategory(Category category)
+        {
+            return GetProductsByCategory(category).Sum(product => product.Quantity);
+        }
+
+        public decimal GetTotalValueByCategory(Category category)
+        {
+            return GetProductsByCategory(category).Sum(product => product.TotalPrice);
         }
 
         public void AddProduct(Product product)
         {
+            if (string.IsNullOrWhiteSpace(product.Name))
+                throw new ArgumentException("Product name cannot be empty.", nameof(product));
+
+            if (product.PricePerUnit < 0 || product.Quantity < 0)
+                throw new ArgumentException("Product price and quantity cannot be negative.", nameof(product));
+
             _products.Add(product);
+            SaveToFile();
+        }
+
+        public bool UpdateProduct(int id, string name, Category category, Unit unit, decimal pricePerUnit, decimal quantity)
+        {
+            Product? product = GetProductById(id);
+            if (product == null)
+                return false;
+
+            if (string.IsNullOrWhiteSpace(name) 
+                || pricePerUnit < 0 
+                || quantity < 0
+                || !Enum.IsDefined(category)
+                || !Enum.IsDefined(unit))
+            {
+                return false;
+            }
+
+            product.Name = name;
+            product.CategoryId = category;
+            product.UnitId = unit;
+            product.PricePerUnit = pricePerUnit;
+            product.Quantity = quantity;
+            product.TotalPrice = pricePerUnit * quantity;
+            product.LastModifiedOn = DateTime.Now;
+
+            SaveToFile();
+            return true;
         }
 
         public void SaveToFile()
         {
-
             _fileHandler.WriteJson(_products);
         }
 
-        public void View()
+        public bool DeleteProduct(int id)
         {
-            throw new NotImplementedException();
+            Product? product = _products.Find(product => product.Id == id);
+            if (product == null)
+                return false;
+
+            _products.Remove(product);
+            SaveToFile();
+            return true;
         }
 
-        public void Search()
-        {
-            throw new NotImplementedException();
-        }
-
-        public void EditProduct()
-        {
-            throw new NotImplementedException();
-        }
-
-
-        // Takes the ID of a product and removes it from the file Products.json (and from the _products list in memory).
-        public void Remove()
-        {
-            Console.Write("Enter the ID of the product to remove: ");
-            if (!int.TryParse(Console.ReadLine(), out int id))
-            {
-                Console.WriteLine("Invalid ID. Please enter a valid integer.");
-                return;
-            }
-            var product = _products.Find(p => p.Id == id);
-            if (product != null)
-            {
-                _products.Remove(product);
-                _fileHandler.WriteJson(_products);
-            }
-            else
-            {
-                Console.WriteLine($"Product with ID {id} not found.");
-            }
-
-
-        }
-
-        public void Reports()
-        {
-            throw new NotImplementedException();
-        }
     }
 }

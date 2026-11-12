@@ -34,7 +34,7 @@ namespace inventory.Presentation
                 string? input = Console.ReadLine();
 
                 if (input == "0") {
-                    UI.ShowMessage("Exiting the program...", "info");
+                    UI.ShowMessage("Exiting...", "info");
                     return;
                 }
 
