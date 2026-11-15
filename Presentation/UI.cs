@@ -37,7 +37,7 @@ namespace inventory.Presentation
                     break;
 
                 case "statistics":
-                    Console.ForegroundColor = ConsoleColor.DarkMagenta;
+                    Console.ForegroundColor = ConsoleColor.Magenta;
                     break;
 
                 default:
@@ -112,6 +112,7 @@ namespace inventory.Presentation
                 return input.Trim();
             }
         }
+
         private static decimal? ReadDecimal(string prompt)
         {
             while (true)
@@ -198,7 +199,7 @@ namespace inventory.Presentation
 
             if (matchingProducts.Count == 0)
             {
-                ShowMessage($"No products match your search {searchTerm}.", "info");
+                ShowMessage($"No products match your search {searchTerm}.", "warning");
             }
             else
             {
@@ -379,6 +380,25 @@ namespace inventory.Presentation
             }
         }
 
+        // This method displays the current and edited values for a product attribute, highlighting any unsaved changes.
+        private static void WriteEditOption(int number, string label, string currentValue, string editedValue)
+        {
+            Console.Write($"{number}. {label} [Current: ");
+            Console.ForegroundColor = ConsoleColor.DarkYellow;
+            Console.Write(currentValue);
+            Console.ResetColor();
+
+            if (!string.Equals(currentValue, editedValue, StringComparison.Ordinal))
+            {
+                Console.Write(" -> New: ");
+                Console.ForegroundColor = ConsoleColor.Green;
+                Console.Write(editedValue);
+                Console.ResetColor();
+            }
+
+            Console.WriteLine("]");
+        }
+
         public static void DeleteProduct(ProductManager productManager)
         {
             while (true)
@@ -442,25 +462,6 @@ namespace inventory.Presentation
             }
         }
 
-        // This method displays the current and edited values for a product attribute, highlighting any unsaved changes.
-        private static void WriteEditOption(int number, string label, string currentValue, string editedValue)
-        {
-            Console.Write($"{number}. {label} [Current: ");
-            Console.ForegroundColor = ConsoleColor.DarkYellow;
-            Console.Write(currentValue);
-            Console.ResetColor();
-
-            if (!string.Equals(currentValue, editedValue, StringComparison.Ordinal))
-            {
-                Console.Write(" -> New: ");
-                Console.ForegroundColor = ConsoleColor.Green;
-                Console.Write(editedValue);
-                Console.ResetColor();
-            }
-
-            Console.WriteLine("]");
-        }
-
         private static void ShowProductsForSelection(ProductManager productManager)
         {
             ShowMessage("Products", "info");
@@ -502,7 +503,7 @@ namespace inventory.Presentation
         private static void ShowTotalInventoryValue(ProductManager productManager)
         {
             decimal totalValue = productManager.GetTotalInventoryValue();
-
+            Console.WriteLine();
             ShowMessage(
                 $"Total inventory value: {totalValue:N2}",
                 "statistics");
@@ -510,6 +511,7 @@ namespace inventory.Presentation
 
         private static void ShowInventoryLevelsSummary(ProductManager productManager)
         {
+            Console.WriteLine();
             ShowMessage("Inventory levels summary", "statistics");
             Console.WriteLine($"Number of products: {productManager.GetProductCount()}");
             Console.WriteLine($"Total quantity in stock: {productManager.GetTotalQuantity():N2}");
@@ -519,18 +521,21 @@ namespace inventory.Presentation
 
         private static void ShowCategoryReport(ProductManager productManager)
         {
+            Console.WriteLine();
             ShowMessage("Inventory quantity and value by category", "statistics");
 
             WriteTableHeader(
                 ("Category", 20),
-                ("Quantity", 15),
+                ("Products", 10),
+                ("Total Quantity", 20),
                 ("Total value", 15));
 
             foreach (Category category in Enum.GetValues<Category>())
             {
                 Console.WriteLine(
                     $"{category,-20} " +
-                    $"{productManager.GetTotalQuantityByCategory(category),-15:N2} " +
+                    $"{productManager.GetProductsByCategory(category).Count,-10} " +
+                    $"{productManager.GetTotalQuantityByCategory(category),-20:N2} " +
                     $"{productManager.GetTotalValueByCategory(category),-15:N2}");
             }
 
@@ -684,7 +689,7 @@ namespace inventory.Presentation
             foreach (Category category in Enum.GetValues(typeof(Category)))
             {
                 Console.WriteLine();
-                ShowMessage($"Category: {category}", "statistics");
+                ShowMessage($"Category: {category}", "info");
 
                 WriteTableHeader(
                     ("ID", 5),
@@ -732,13 +737,13 @@ namespace inventory.Presentation
             List<string> warnings = [];
 
             if (product.PricePerUnit == 0)
-                warnings.Add("!: No price per unit set");
+                warnings.Add("No price per unit set");
 
             if (product.Quantity >= 0 && product.Quantity <= 5)
-                warnings.Add("!: Low quantity");
+                warnings.Add("Low quantity");
 
             if (includeLastModifiedWarning && product.LastModifiedOn < DateTime.Today.AddMonths(-12))
-                warnings.Add("!: Not modified in over 12 months");
+                warnings.Add("Not modified in over 12 months");
 
             return string.Join(" | ", warnings);
         }

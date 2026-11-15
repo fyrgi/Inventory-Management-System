@@ -40,7 +40,7 @@ namespace inventory.Services
                 .Where(product => ContainsSearchTerm(product.Id.ToString(), searchTerm) ||
                                  ContainsSearchTerm(product.Name, searchTerm) ||
                                  ContainsSearchTerm(product.CategoryId.ToString(), searchTerm))
-                .OrderBy(product => product.Id)
+                .OrderBy(product => product.Name)
                 .ToList();
         }
 

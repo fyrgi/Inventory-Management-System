@@ -165,7 +165,7 @@
     "LastModifiedOn": "2025-04-22T00:00:00"
   },
   {
-    "Id": 18,
+    "Id": 20,
     "Name": "Reusable Water Bottle",
     "PricePerUnit": 11.5,
     "CategoryId": 8,
@@ -176,14 +176,25 @@
     "LastModifiedOn": "2025-04-22T00:00:00"
   },
   {
-    "Id": 19,
-    "Name": "Reusable Tea Bottle",
+    "Id": 21,
+    "Name": "TEAusable Tea bottle",
     "PricePerUnit": 0,
     "CategoryId": 8,
     "UnitId": 1,
-    "Quantity": 4,
+    "Quantity": 10,
     "TotalPrice": 0,
     "AddedOn": "2025-01-08T00:00:00",
-    "LastModifiedOn": "2026-11-12T16:03:55.1380125+01:00"
+    "LastModifiedOn": "2026-11-13T09:22:39.5807903+01:00"
+  },
+  {
+    "Id": 19,
+    "Name": "Tea Bottle Pippi",
+    "PricePerUnit": 12.5,
+    "CategoryId": 8,
+    "UnitId": 1,
+    "Quantity": 10,
+    "TotalPrice": 125.0,
+    "AddedOn": "2025-01-08T00:00:00",
+    "LastModifiedOn": "2026-11-15T23:17:38.4886804+01:00"
   }
 ]

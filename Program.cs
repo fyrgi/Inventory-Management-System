@@ -46,10 +46,10 @@ if (idRepairs.Count > 0)
 
 List<MenuOption> mainMenuOptions =
 [
-    new("Add Product", () => UI.AddProduct(productManager)),
     new("View Products", () => UI.ShowProducts(productManager)),
     new("Search Products", () => UI.SearchProducts(productManager)),
     new("Edit Product", () => UI.EditProduct(productManager)),
+    new("Add Product", () => UI.AddProduct(productManager)),
     new("Remove Product", () => UI.DeleteProduct(productManager)),
     new("Reports", () => UI.ShowReports(productManager))
 ];
