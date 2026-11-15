@@ -6,7 +6,7 @@ A console-based inventory management system for a small stationery shop. The app
 
 The main design goal of this project was to use a clean separation of responsibilities:
 
-- **Presentation** handles menus, console input, table output, colors, and messages.
+- **Presentation** handles multilevel menus, console input, table output, colors, and messages.
 - **Services** contains product operations, validation, searching, sorting, calculations, and persistence coordination.
 - **Models** contains the product data and enums used by the application.
 - **Data** contains the JSON inventory file.
@@ -22,8 +22,8 @@ The user can add a product by entering:
 - Product name
 - Category
 - Price per unit
-- Quantity
-- Unit
+- Quantity (an integer corresponding to an ID from a enum containing quantity types)
+- Unit (an integer corresponding to an ID from a enum containing unit types)
 
 The product receives the next available ID. Its total price is calculated from:
 
@@ -43,7 +43,8 @@ The View Products submenu provides several ways to inspect the inventory:
 - **By Quantity** - orders products from the lowest quantity to the highest.
 - **By ID** - orders products from the lowest ID to the highest.
 
-Product tables display relevant details such as ID, name, category, quantity, unit, price per unit, total price, and dates where applicable.
+Product tables display relevant details such as ID, name, category, quantity, price per unit, total price, and dates where applicable.
+The displays should include unit name too, but for now, the unit is not displayed.
 
 Warnings are displayed consistently in the product views:
 
@@ -51,7 +52,8 @@ Warnings are displayed consistently in the product views:
 - Products with a quantity from 0 through 5 are marked in red as low quantity.
 - Products not modified for more than 12 months are marked in red in the last-modified view.
 
-Dates are displayed as `yyyy-MM-dd`.
+Dates are displayed as `yyyy-mm-dd`.
+<img width="1456" height="541" alt="image" src="https://github.com/user-attachments/assets/5db54d44-d31c-44f4-8af2-da1f0e8b5ac7" />
 
 ### Search Products
 
@@ -64,7 +66,7 @@ Products can be searched by a text value matching:
 The search is case-insensitive and supports partial matches. For example, searching for `5` can match an ID containing `5`, a product name containing `5`, or a category name containing `5`. The numeric category ID is not searched as a category name.
 
 Matching text is highlighted in purple in the result table so the user can see whether the match came from the ID, product name, category name, or more than one field.
-
+<img width="1289" height="506" alt="image" src="https://github.com/user-attachments/assets/8714df3c-c598-44d8-b0a4-8cf92f0e0669" />
 ### Edit Product
 
 The user selects a product by ID and can edit:
@@ -83,6 +85,8 @@ When changes are saved:
 - `TotalPrice` is recalculated.
 - `LastModifiedOn` is updated.
 - The updated inventory is written to `Products.json`.
+
+<img width="571" height="183" alt="image" src="https://github.com/user-attachments/assets/868458ae-227c-4406-812f-6031199be7e8" />
 
 Choosing **Cancel and exit** discards all pending changes and leaves the file unchanged.
 
@@ -111,6 +115,7 @@ Displays:
 - Number of products
 - Total quantity in stock
 - Total inventory value
+<img width="336" height="304" alt="image" src="https://github.com/user-attachments/assets/e0fb3ac2-ee27-4063-9854-239a64981c3a" />
 
 ### Quantity and value by category
 
@@ -118,6 +123,7 @@ Displays each category with:
 
 - Total quantity in the category
 - Total value of products in the category
+
 
 ## Product IDs
 
@@ -210,19 +216,5 @@ Inventory-Management-System/
 ├── Program.cs
 └── inventory.csproj
 ```
-## Screenshots
-Reports in different views 
-<img width="1456" height="541" alt="image" src="https://github.com/user-attachments/assets/5db54d44-d31c-44f4-8af2-da1f0e8b5ac7" />
-
-Search by string within the name, ID, or Category of the product with a highlight on the search text. 
-<img width="1289" height="506" alt="image" src="https://github.com/user-attachments/assets/8714df3c-c598-44d8-b0a4-8cf92f0e0669" />
-
-Edit function which displays current and edited state of the attributes. The user must Save and exit for the changes to be saved. 
-<img width="571" height="183" alt="image" src="https://github.com/user-attachments/assets/868458ae-227c-4406-812f-6031199be7e8" />
-
-Reports - the system offers 3 reports that display a summary of the inventory
-<img width="336" height="304" alt="image" src="https://github.com/user-attachments/assets/e0fb3ac2-ee27-4063-9854-239a64981c3a" />
-
-The user might also add a new product or remove a product by providing the id of the one to be deleted.
 
 
