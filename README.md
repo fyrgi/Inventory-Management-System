@@ -217,4 +217,7 @@ Inventory-Management-System/
 └── inventory.csproj
 ```
 
-
+Known issues:
+- The application does not currently display the unit name in product tables. This is a planned enhancement for future versions.
+- The console UI needs improvement for better readability and tracebility. Clearing everynow and then might be beneficial.
+- A better logic in the Views report might help the user to concentrate on the right information. For example, the user might want to see only products with low quantity or products that have not been modified for a long time and they don't need to see all the products. This is a planned enhancement for future versions.
