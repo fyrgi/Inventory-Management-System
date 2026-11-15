@@ -210,3 +210,19 @@ Inventory-Management-System/
 ├── Program.cs
 └── inventory.csproj
 ```
+## Screenshots
+Reports in different views 
+<img width="1456" height="541" alt="image" src="https://github.com/user-attachments/assets/5db54d44-d31c-44f4-8af2-da1f0e8b5ac7" />
+
+Search by string within the name, ID, or Category of the product with a highlight on the search text. 
+<img width="1289" height="506" alt="image" src="https://github.com/user-attachments/assets/8714df3c-c598-44d8-b0a4-8cf92f0e0669" />
+
+Edit function which displays current and edited state of the attributes. The user must Save and exit for the changes to be saved. 
+<img width="571" height="183" alt="image" src="https://github.com/user-attachments/assets/868458ae-227c-4406-812f-6031199be7e8" />
+
+Reports - the system offers 3 reports that display a summary of the inventory
+<img width="336" height="304" alt="image" src="https://github.com/user-attachments/assets/e0fb3ac2-ee27-4063-9854-239a64981c3a" />
+
+The user might also add a new product or remove a product by providing the id of the one to be deleted.
+
+
